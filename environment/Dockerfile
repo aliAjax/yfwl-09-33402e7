@@ -4,16 +4,18 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
 
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends python3 python3-pytest tmux asciinema \
+    && apt-get install -y --no-install-recommends python3 python3-pytest tmux asciinema util-linux procps \
     && rm -rf /var/lib/apt/lists/*
 
-RUN useradd --create-home --uid 10001 worker \
+RUN groupadd --gid 10002 testrunner \
+    && useradd --uid 10002 --gid 10002 --no-create-home --shell /usr/sbin/nologin testrunner \
+    && useradd --create-home --uid 10001 worker \
     && mkdir -p /app /logs/verifier \
     && chown -R worker:worker /app /logs
 
 WORKDIR /app
 COPY app/ /app/
-RUN chmod 0755 /app/ode_recover.py
+RUN chown -R worker:worker /app && chmod 0755 /app/ode_recover.py
 
 USER worker
 CMD ["sleep", "infinity"]
