@@ -6,7 +6,8 @@
     "core_min_share": 0.5
   },
   "gate_tests": [
-    "test_outputs.py::test_joint_recovery_returns_shared_parameters"
+    "test_outputs.py::test_joint_recovery_returns_shared_parameters",
+    "test_outputs.py::test_two_segment_case_reports_rank_eight"
   ],
   "tests": {
     "test_outputs.py::test_recovery_recovers_cubic_and_phase": {

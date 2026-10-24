@@ -174,6 +174,16 @@ def test_reported_rms_is_recomputed_from_observations(tmp_path):
     assert report["quality"]["jacobian_rank"] == 10
 
 
+def test_two_segment_case_reports_rank_eight(tmp_path):
+    """二段时参数总数为 4+2*2，雅可比满秩必须是 8。"""
+    case = execute(tmp_path, payload("two-segment-rank", samples=16, segments=2), "two")
+    report = report_of(case)
+    assert case["process"].returncode == 0
+    assert len(report["initial_states"]) == 2
+    assert report["quality"]["jacobian_rank"] == 8
+    assert report["quality"]["rms"] <= 0.002
+
+
 def test_success_report_is_compact_sorted_utf8_with_newline(tmp_path):
     """题面：「成功报告使用 UTF-8、键排序、逗号后无空白，并在末尾保留一个换行。」"""
     case = execute(tmp_path, payload("canonical-output"), "case_05")
